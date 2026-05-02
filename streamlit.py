@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 import duckdb
 import requests
-from st_gsheets_connection import GSheetsConnection
-# from streamlit_gsheets import GSheetsConnection
+# from st_gsheets_connection import GSheetsConnection
+from streamlit_gsheets import GSheetsConnection
 from langchain.agents import tool, AgentExecutor, create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_groq import ChatGroq

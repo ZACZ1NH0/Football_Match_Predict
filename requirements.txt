@@ -4,8 +4,8 @@ numpy==1.26.4
 duckdb==0.10.2
 requests==2.32.3
 
-st-gsheets-connection==0.0.4
-
+# st-gsheets-connection==0.0.4
+streamlit-gsheets
 langchain==0.2.5
 langchain-core==0.2.9
 langchain-openai==0.1.8
