@@ -3,7 +3,7 @@ pandas
 numpy
 duckdb
 requests
-streamlit-gsheets
+st-gsheets-connection
 langchain
 langchain-openai
 langchain-core
