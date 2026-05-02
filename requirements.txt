@@ -1,9 +1,9 @@
-streamlit
-pandas==1.5.3
-numpy==1.23.5
-st-gsheets-connection
-duckdb
-requests
+streamlit==1.50.0
+pandas==2.3.0
+numpy==2.0.2
+st-gsheets-connection==0.1.0
+duckdb==1.4.4
+requests==2.32.4
 
 langchain==0.3.28
 langchain-anthropic==0.3.22
