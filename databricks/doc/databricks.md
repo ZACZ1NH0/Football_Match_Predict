@@ -1,0 +1,1 @@
+Huấn luyện như trên kaggle, lưu dữ liệu vào catalog. Sau đó ghi đè kết quả mới cập nhật lên sheet hôm trước. Pipeline được đặt lịch chạy mỗi ngày một lần.

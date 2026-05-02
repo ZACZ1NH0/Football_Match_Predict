@@ -1,0 +1,11 @@
+streamlit
+pandas
+numpy
+duckdb
+requests
+streamlit-gsheets
+langchain
+langchain-openai
+langchain-core
+langchain-groq
+python-dotenv
