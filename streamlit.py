@@ -3,8 +3,24 @@ import pandas as pd
 import numpy as np
 import duckdb
 import requests
-from st_gsheets_connection import GSheetsConnection
-# from streamlit_gsheets import GSheetsConnection
+try:
+    # Cách mới nhất (Tích hợp sẵn trong Streamlit 1.28+)
+    from streamlit.connections import GSheetsConnection
+    print("Imported from streamlit.connections")
+except ImportError:
+    try:
+        # Thư viện chính thức được khuyên dùng hiện tại
+        from st_gsheets_connection import GSheetsConnection
+        print("Imported from st_gsheets_connection")
+    except ImportError:
+        try:
+            # Thư viện phiên bản cũ
+            from streamlit_gsheets import GSheetsConnection
+            print("Imported from streamlit_gsheets")
+        except ImportError:
+            import streamlit as st
+            st.error("Không tìm thấy thư viện GSheetsConnection. Vui lòng kiểm tra lại file requirements.txt!")
+
 from langchain.agents import tool, AgentExecutor, create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_groq import ChatGroq
