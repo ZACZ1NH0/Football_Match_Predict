@@ -1,14 +1,15 @@
-streamlit
-pandas
-numpy
-duckdb
-requests
+streamlit==1.35.0
+pandas==2.2.2
+numpy==1.26.4
+duckdb==0.10.2
+requests==2.32.3
 
-streamlit-gsheets
+st-gsheets-connection==0.0.4
 
-langchain
-langchain-openai
-langchain-core
-langchain-groq
+langchain==0.2.5
+langchain-core==0.2.9
+langchain-openai==0.1.8
+langchain-groq==0.1.4
 
-python-dotenv
+python-dotenv==1.0.1
+setuptools
