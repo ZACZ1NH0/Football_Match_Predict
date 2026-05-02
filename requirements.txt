@@ -1,11 +1,14 @@
-streamlit
+streamlit==1.35.0
 pandas
 numpy
 duckdb
 requests
-st-gsheets-connection
+
+st-gsheets-connection==0.0.4
+
 langchain
 langchain-openai
 langchain-core
 langchain-groq
+
 python-dotenv
