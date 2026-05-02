@@ -5,10 +5,16 @@ st-gsheets-connection
 duckdb
 requests
 
-langchain
-langchain-core
-langchain-openai
-langchain-groq
+langchain==0.3.28
+langchain-anthropic==0.3.22
+langchain-core==0.3.83
+langchain-groq==0.3.8
+langchain-openai==0.3.35
+langchain-text-splitters==0.3.11
+langgraph==0.6.11
+langgraph-checkpoint==2.1.2
+langgraph-prebuilt==0.6.5
+langgraph-sdk==0.2.9
 
 python-dotenv
 setuptools
