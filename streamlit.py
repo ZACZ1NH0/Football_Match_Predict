@@ -3,8 +3,7 @@ import pandas as pd
 import numpy as np
 import duckdb
 import requests
-from st_gsheets_connection import GSheetsConnection
-# from streamlit_gsheets import GSheetsConnection
+from streamlit_gsheets import GSheetsConnection
 from langchain.agents import tool, AgentExecutor, create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_groq import ChatGroq
@@ -74,11 +73,11 @@ st.markdown("""
 def load_all_data():
     conn = st.connection("gsheets", type=GSheetsConnection)
     urls = {
-        "results": os.getenv("RESULTS_URL"),
-        "goals": os.getenv("GOAL_URL"),
-        "corners": os.getenv("CORNER_URL"),
-        "cards": os.getenv("CARD_URL"),
-        "ranking": os.getenv("RANKING_URL")
+        "results": st.secrets["RESULTS_URL"],
+        "goals": st.secrets["GOAL_URL"],
+        "corners": st.secrets["CORNER_URL"],
+        "cards": st.secrets["CARD_URL"],
+        "ranking": st.secrets["RANKING_URL"]
     }
     df_res = conn.read(spreadsheet=urls["results"])
     df_gls = conn.read(spreadsheet=urls["goals"])
@@ -424,7 +423,7 @@ Chỉ phân tích chuyên môn: chiến thuật, phong độ, xG, phạt góc, t
 def get_agent_executor(llm_model, api_key):
     llm = ChatGroq(
         temperature=0.3,
-        groq_api_key= os.getenv("GROQ_API_KEY"), 
+        groq_api_key= st.secrets["GROQ_API_KEY"], 
         model_name = "llama-3.3-70b-versatile",
         max_retries=2
     )
