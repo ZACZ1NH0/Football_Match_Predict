@@ -456,50 +456,47 @@ with tab1:
     st.header("Phân tích chi tiết")
     st.markdown("Hệ thống Agent tự động thu thập dữ liệu định lượng (ML) và bối cảnh định tính (Chấn thương, Derby) để đưa ra nhận định chuyên sâu.")
     if st.button(f"Phân Tích Chuyên Sâu: {home_team} vs {away_team}", type="primary", use_container_width=True):
-        if not openrouter_key:
-            st.error("Chưa có API KEY")
-        else:
-            with st.spinner("AI đang phân tích dữ liệu DuckDB và cào thông tin chấn thương từ FPL..."):
-                agent_executor = get_agent_executor(model_choice, openrouter_key)
-                agent_task = f"""
-                    Bạn là một Chuyên gia Phân tích Dữ liệu Bóng đá cấp cao. Nhiệm vụ của bạn là thực hiện bản "Deep Match Analysis" (Phân tích Chuyên sâu) cho trận đấu: {home_team} (Sân nhà) vs {away_team} (Sân khách).
+        with st.spinner("AI đang phân tích dữ liệu DuckDB và cào thông tin chấn thương từ FPL..."):
+            agent_executor = get_agent_executor(model_choice, openrouter_key)
+            agent_task = f"""
+                Bạn là một Chuyên gia Phân tích Dữ liệu Bóng đá cấp cao. Nhiệm vụ của bạn là thực hiện bản "Deep Match Analysis" (Phân tích Chuyên sâu) cho trận đấu: {home_team} (Sân nhà) vs {away_team} (Sân khách).
 
-                    PHẦN 1: QUY TRÌNH THU THẬP DỮ LIỆU BẮT BUỘC (TOOL CALLING)
-                    Bạn PHẢI gọi lần lượt và đầy đủ các công cụ sau trước khi viết bất kỳ lời bình luận nào:
-                    1. Gọi 'execute_sql_query': Lấy toàn bộ số liệu định lượng từ mô hình học máy (xG dự kiến, xác suất Thắng/Hòa/Thua, dự đoán số thẻ/góc).
-                    2. Gọi 'get_match_context': Lấy thông tin về bối cảnh lịch sử, mức độ thù địch hoặc tính chất căng thẳng của cặp đấu này.
-                    3. Gọi 'get_injury_news': Gọi 2 lần (một cho {home_team}, một cho {away_team}) để xác định danh sách các trụ cột vắng mặt.
-                    4. Gọi 'get_team_key_players': Gọi 2 lần (một cho {home_team}, một cho {away_team}) để lấy danh sách cầu thủ đang có phong độ cao nhất hiện tại.
-                    5. Gọi 'get_standings_and_context': Lấy thông tin về Home_Rank, Away_Rank và Matchweek để đưa ra nhận định mức độ quan trọng của cặp đấu này
-                    PHẦN 2: CẤU TRÚC BÁO CÁO PHÂN TÍCH (XUẤT RA BẰNG MARKDOWN)
-                    Sau khi thu thập đủ dữ liệu, BẮT BUỘC viết báo cáo chi tiết, phân tích sâu sắc. MỖI MỤC DƯỚI ĐÂY PHẢI ĐƯỢC PHÂN TÍCH ÍT NHẤT 150-200 CHỮ:
+                PHẦN 1: QUY TRÌNH THU THẬP DỮ LIỆU BẮT BUỘC (TOOL CALLING)
+                Bạn PHẢI gọi lần lượt và đầy đủ các công cụ sau trước khi viết bất kỳ lời bình luận nào:
+                1. Gọi 'execute_sql_query': Lấy toàn bộ số liệu định lượng từ mô hình học máy (xG dự kiến, xác suất Thắng/Hòa/Thua, dự đoán số thẻ/góc).
+                2. Gọi 'get_match_context': Lấy thông tin về bối cảnh lịch sử, mức độ thù địch hoặc tính chất căng thẳng của cặp đấu này.
+                3. Gọi 'get_injury_news': Gọi 2 lần (một cho {home_team}, một cho {away_team}) để xác định danh sách các trụ cột vắng mặt.
+                4. Gọi 'get_team_key_players': Gọi 2 lần (một cho {home_team}, một cho {away_team}) để lấy danh sách cầu thủ đang có phong độ cao nhất hiện tại.
+                5. Gọi 'get_standings_and_context': Lấy thông tin về Home_Rank, Away_Rank và Matchweek để đưa ra nhận định mức độ quan trọng của cặp đấu này
+                PHẦN 2: CẤU TRÚC BÁO CÁO PHÂN TÍCH (XUẤT RA BẰNG MARKDOWN)
+                Sau khi thu thập đủ dữ liệu, BẮT BUỘC viết báo cáo chi tiết, phân tích sâu sắc. MỖI MỤC DƯỚI ĐÂY PHẢI ĐƯỢC PHÂN TÍCH ÍT NHẤT 150-200 CHỮ:
 
-                    ### 📊 1. Giải mã Số liệu Định lượng (Quantitative Decoding)
-                    - Không chỉ liệt kê con số, hãy DIỄN GIẢI ý nghĩa của chúng. Ví dụ: xG của đội nhà cao hơn nghĩa là họ áp đảo lối chơi thế nào? Xác suất thẻ/góc phản ánh nhịp độ trận đấu ra sao?
+                ### 📊 1. Giải mã Số liệu Định lượng (Quantitative Decoding)
+                - Không chỉ liệt kê con số, hãy DIỄN GIẢI ý nghĩa của chúng. Ví dụ: xG của đội nhà cao hơn nghĩa là họ áp đảo lối chơi thế nào? Xác suất thẻ/góc phản ánh nhịp độ trận đấu ra sao?
 
-                    ### ⚔️ 2. Điểm nóng Chiến thuật & Biến số Nhân sự
-                    - Đào sâu vào sự đối đầu của các "Cầu thủ chủ chốt hiện tại". Nếu họ đối đầu nhau trên sân, kịch bản nào sẽ xảy ra?
-                    - Phân tích chi tiết lỗ hổng chiến thuật nếu có "Trụ cột chấn thương/vắng mặt". Đội hình sẽ bị xáo trộn ra sao và ảnh hưởng thế nào đến con số xG dự kiến?
+                ### ⚔️ 2. Điểm nóng Chiến thuật & Biến số Nhân sự
+                - Đào sâu vào sự đối đầu của các "Cầu thủ chủ chốt hiện tại". Nếu họ đối đầu nhau trên sân, kịch bản nào sẽ xảy ra?
+                - Phân tích chi tiết lỗ hổng chiến thuật nếu có "Trụ cột chấn thương/vắng mặt". Đội hình sẽ bị xáo trộn ra sao và ảnh hưởng thế nào đến con số xG dự kiến?
 
-                    ### ⚠️ 3. Bối cảnh Lịch sử & Rủi ro Phá vỡ Mô hình (Contextual Risks)
-                    - Đánh giá mức độ thù địch của cặp đấu này. Tính chất căng thẳng của trận đấu sẽ đẩy số lượng thẻ phạt và phạt góc lên cao như thế nào so với dự đoán của mô hình thuật toán?
+                ### ⚠️ 3. Bối cảnh Lịch sử & Rủi ro Phá vỡ Mô hình (Contextual Risks)
+                - Đánh giá mức độ thù địch của cặp đấu này. Tính chất căng thẳng của trận đấu sẽ đẩy số lượng thẻ phạt và phạt góc lên cao như thế nào so với dự đoán của mô hình thuật toán?
 
-                    ### 🎯 4. Kết luận Chuyên sâu (Final Verdict)
-                    - Tổng hợp lại: Yếu tố nào (Dữ liệu thuật toán hay Bối cảnh con người) sẽ đóng vai trò quyết định cục diện trận đấu này? Đưa ra kịch bản diễn biến chi tiết. Kết quả trận đấu chung cuộc.
+                ### 🎯 4. Kết luận Chuyên sâu (Final Verdict)
+                - Tổng hợp lại: Yếu tố nào (Dữ liệu thuật toán hay Bối cảnh con người) sẽ đóng vai trò quyết định cục diện trận đấu này? Đưa ra kịch bản diễn biến chi tiết. Kết quả trận đấu chung cuộc.
 
-                    PHẦN 3: 🛑 NHỮNG LUẬT THÉP BẮT BUỘC PHẢI TUÂN THỦ
-                    1. CHỐNG ẢO GIÁC: Chỉ nhắc đến tên cầu thủ có trong kết quả của Tool.
-                    2. XỬ LÝ LỖI: Nếu Tool trả về rỗng, hãy phân tích dựa trên chiến thuật chung của đội thay vì cầu thủ cụ thể.
-                    3. NGÔN NGỮ HỌC THUẬT VÀ SẠCH: Tuyệt đối KHÔNG sử dụng các từ ngữ liên quan đến cá độ, đặt cược, tỷ lệ kèo, nhà cái. Báo cáo thuần túy phục vụ chuyên môn thể thao.
-                    4. YÊU CẦU ĐỘ DÀI: Văn phong phải mang tính báo chí phân tích thể thao (như The Athletic). Viết câu dài, lập luận nhiều lớp, mở rộng các luồng suy nghĩ. Toàn bộ báo cáo phải dài tối thiểu 1000 - 1200 chữ.
-                    """
-                try:
-                    response = agent_executor.invoke({"input": agent_task})
-                    st.success("Phân tích hoàn tất!")
-                    with st.expander(f"Báo Cáo Phân Tích: {home_team} vs {away_team}", expanded=True):
-                        st.markdown(response["output"])
-                except Exception as e:
-                    st.error(f"Lỗi AI: {str(e)}")
+                PHẦN 3: 🛑 NHỮNG LUẬT THÉP BẮT BUỘC PHẢI TUÂN THỦ
+                1. CHỐNG ẢO GIÁC: Chỉ nhắc đến tên cầu thủ có trong kết quả của Tool.
+                2. XỬ LÝ LỖI: Nếu Tool trả về rỗng, hãy phân tích dựa trên chiến thuật chung của đội thay vì cầu thủ cụ thể.
+                3. NGÔN NGỮ HỌC THUẬT VÀ SẠCH: Tuyệt đối KHÔNG sử dụng các từ ngữ liên quan đến cá độ, đặt cược, tỷ lệ kèo, nhà cái. Báo cáo thuần túy phục vụ chuyên môn thể thao.
+                4. YÊU CẦU ĐỘ DÀI: Văn phong phải mang tính báo chí phân tích thể thao (như The Athletic). Viết câu dài, lập luận nhiều lớp, mở rộng các luồng suy nghĩ. Toàn bộ báo cáo phải dài tối thiểu 1000 - 1200 chữ.
+                """
+            try:
+                response = agent_executor.invoke({"input": agent_task})
+                st.success("Phân tích hoàn tất!")
+                with st.expander(f"Báo Cáo Phân Tích: {home_team} vs {away_team}", expanded=True):
+                    st.markdown(response["output"])
+            except Exception as e:
+                st.error(f"Lỗi AI: {str(e)}")
 
 # ==========================================
 # 8. TRUY VẤN QUA AI (MCP BRIDGE)
@@ -515,23 +512,20 @@ with tab2:
             st.markdown(msg["content"])
 
     if prompt_input := st.chat_input("VD: Lịch sử đấu của Man United 5 trận gần nhất"):
-        if not openrouter_key:
-            st.warning("Nhập OpenRouter API Key ở Sidebar để chat.")
-        else:
-            st.session_state.messages.append({"role": "user", "content": prompt_input})
-            with st.chat_message("user"):
-                st.markdown(prompt_input)
+        st.session_state.messages.append({"role": "user", "content": prompt_input})
+        with st.chat_message("user"):
+            st.markdown(prompt_input)
 
-            with st.chat_message("assistant"):
-                with st.spinner("Đang tư duy và truy vấn dữ liệu..."):
-                    try:
-                        agent_executor = get_agent_executor(model_choice, openrouter_key)
-                        response = agent_executor.invoke({"input": prompt_input})
-                        answer = response["output"]
-                        st.markdown(answer)
-                        st.session_state.messages.append({"role": "assistant", "content": answer})
-                    except Exception as e:
-                        st.error(f"Lỗi kết nối API: {str(e)}")
+        with st.chat_message("assistant"):
+            with st.spinner("Đang tư duy và truy vấn dữ liệu..."):
+                try:
+                    agent_executor = get_agent_executor(model_choice, openrouter_key)
+                    response = agent_executor.invoke({"input": prompt_input})
+                    answer = response["output"]
+                    st.markdown(answer)
+                    st.session_state.messages.append({"role": "assistant", "content": answer})
+                except Exception as e:
+                    st.error(f"Lỗi kết nối API: {str(e)}")
 
 # ==========================================
 # 9. FOOTER
