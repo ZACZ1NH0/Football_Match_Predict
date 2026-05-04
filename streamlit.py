@@ -437,7 +437,7 @@ TUYỆT ĐỐI KHÔNG bàn luận, phân tích, hay đề cập đến tỷ lệ
 Chỉ phân tích chuyên môn: chiến thuật, phong độ, xG, phạt góc, thẻ phạt, chấn thương.
 """
 
-def get_agent_executor(llm_model, api_key):
+def get_agent_executor():
     llm = ChatGroq(
         temperature=0.3,
         groq_api_key= st.secrets["GROQ_API_KEY"], 
@@ -457,7 +457,7 @@ with tab1:
     st.markdown("Hệ thống Agent tự động thu thập dữ liệu định lượng (ML) và bối cảnh định tính (Chấn thương, Derby) để đưa ra nhận định chuyên sâu.")
     if st.button(f"Phân Tích Chuyên Sâu: {home_team} vs {away_team}", type="primary", use_container_width=True):
         with st.spinner("AI đang phân tích dữ liệu DuckDB và cào thông tin chấn thương từ FPL..."):
-            agent_executor = get_agent_executor(model_choice, openrouter_key)
+            agent_executor = get_agent_executor()
             agent_task = f"""
                 Bạn là một Chuyên gia Phân tích Dữ liệu Bóng đá cấp cao. Nhiệm vụ của bạn là thực hiện bản "Deep Match Analysis" (Phân tích Chuyên sâu) cho trận đấu: {home_team} (Sân nhà) vs {away_team} (Sân khách).
 
@@ -519,7 +519,7 @@ with tab2:
         with st.chat_message("assistant"):
             with st.spinner("Đang tư duy và truy vấn dữ liệu..."):
                 try:
-                    agent_executor = get_agent_executor(model_choice, openrouter_key)
+                    agent_executor = get_agent_executor()
                     response = agent_executor.invoke({"input": prompt_input})
                     answer = response["output"]
                     st.markdown(answer)
